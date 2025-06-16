@@ -60,7 +60,11 @@ pip install textual textual-dev
 
 Clonare o Scaricare il Progetto: Ottenere il codice sorgente di questo repository (via git clone o download ZIP).
 Installare eSpeak-NG: Verificare che il comando espeak-ng funzioni nel terminale. Provare ad eseguire espeak-ng "ciao" per test.
-Lanciare l'App: Eseguire lo script principale (ad esempio python espeak_tui.py). Si aprirà la UI testuale nel terminale. In caso di problemi di rendering, assicurarsi che il terminale supporti colori ANSI e Unicode.
+Lanciare l'App: Eseguire l'applicazione con
+```bash
+python -m espeakng_tui.estui
+```
+Si aprirà la UI testuale nel terminale. In caso di problemi di rendering, assicurarsi che il terminale supporti colori ANSI e Unicode.
 ## Utilizzo dell'Applicazione
 - Navigazione: Usare i tasti Tab/Shift+Tab per muoversi tra i controlli (parametri, campo testo, lista messaggi, pulsante). La lista di messaggi a destra è scrollabile con freccia su/giù e selezionabile con Invio.
 - Impostazione Parametri: Modificare i valori desiderati nei campi dedicati (es. digitare un numero per volume, scegliere una voce dall'elenco se implementato, ecc.). Ogni variazione aggiornerà l'anteprima del comando in basso.

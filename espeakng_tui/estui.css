@@ -1,0 +1,9 @@
+#main {
+    height: 100%;
+}
+
+#left, #right {
+    width: 1fr;
+    border: round green;
+    padding: 1;
+}
