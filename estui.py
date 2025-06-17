@@ -22,27 +22,6 @@ class Defaults:
     WORD_GAP = "0"
     TEXT = ""
 
-
-PRESET_MESSAGES = [
-    MessagePreset(
-        text="Ciao a tutti!",
-        voice=Defaults.VOICE,
-        speed=Defaults.SPEED,
-        pitch=Defaults.PITCH,
-        volume=Defaults.VOLUME,
-        word_gap=Defaults.WORD_GAP,
-    ),
-    MessagePreset(
-        text="Benvenuti nella demo di eSpeak-NG.",
-        voice=Defaults.VOICE,
-        speed=Defaults.SPEED,
-        pitch=Defaults.PITCH,
-        volume=Defaults.VOLUME,
-        word_gap=Defaults.WORD_GAP,
-    ),
-]
-
-
 class MessageItem(ListItem):
     """List item representing a saved message."""
 
