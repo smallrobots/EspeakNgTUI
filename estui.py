@@ -1,5 +1,5 @@
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Container
+from textual.containers import Horizontal, Vertical, Container
 from textual.screen import Screen
 from textual.widgets import Static
 
@@ -9,10 +9,12 @@ class MainScreen(Screen):
     """Screen principale dell'applicazione."""
 
     def compose(self) -> ComposeResult:
-        """Crea il layout di base con due colonne."""
-        with Horizontal(id="main"):
-            yield Container(Static("Sinistra"), id="left")
-            yield Container(Static("Destra"), id="right")
+        """Crea il layout di base con due colonne e un'area inferiore."""
+        with Vertical(id="root"):
+            with Horizontal(id="main"):
+                yield Container(Static("Controlli"), id="left")
+                yield Container(Static("Messaggi"), id="right")
+            yield Static("Anteprima comando", id="preview")
 
 
 class EspeakNgTuiApp(App):

@@ -1,9 +1,20 @@
-#main {
+#root {
     height: 100%;
+}
+
+#main {
+    height: 1fr;
 }
 
 #left, #right {
     width: 1fr;
     border: round green;
+    padding: 1;
+}
+
+#preview {
+    height: 3;
+    dock: bottom;
+    border: round yellow;
     padding: 1;
 }
