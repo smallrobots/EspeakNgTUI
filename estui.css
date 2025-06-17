@@ -35,12 +35,36 @@
 }
 
 #messages ListItem {
-    layout: horizontal;
+    layout: vertical;
+    border: round green;
+    padding: 0 1;
+    margin: 0 0 1 0;
+    height: auto;
+    content-align: left top;
+}
+
+#messages ListItem .msg-text {
+    width: 100%;
+    content-align: left middle;
+    text-wrap: wrap;
+    height: auto;
+}
+
+#messages ListItem .params {
+    color: gray;
+    text-style: italic;
+    padding-left: 1;
+    height: auto;
+    content-align: left top;
 }
 
 #messages Button#delete {
     width: 3;
+    dock: right;
+    margin-left: 1;
+    content-align: center middle;
 }
+
 
 .label {
     text-style: bold;
