@@ -12,18 +12,18 @@ class EspeakParameters:
 
 
 def compose_command(params: EspeakParameters) -> str:
-    """Return the espeak-ng command string for the given parameters."""
-    cmd = ["espeak-ng"]
+    args = ["espeak-ng"]
     if params.voice:
-        cmd.extend(["-v", params.voice])
+        args += ["-v", params.voice]
     if params.speed:
-        cmd.extend(["-s", params.speed])
+        args += ["-s", params.speed]
     if params.pitch:
-        cmd.extend(["-p", params.pitch])
+        args += ["-p", params.pitch]
     if params.volume:
-        cmd.extend(["-a", params.volume])
+        args += ["-a", params.volume]
     if params.word_gap:
-        cmd.extend(["-g", params.word_gap])
+        args += ["-g", params.word_gap]
     if params.text:
-        cmd.append(shlex.quote(params.text))
-    return " ".join(cmd)
+        args.append(shlex.quote(params.text))  # 👈 protezione da caratteri strani
+    retValue = " ".join(args)
+    return retValue
