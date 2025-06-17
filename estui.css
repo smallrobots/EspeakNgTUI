@@ -14,7 +14,7 @@
 
 #left {
     layout: vertical;
-    gap: 1;
+    padding: 1;
 }
 
 #left Input {

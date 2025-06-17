@@ -47,9 +47,10 @@ class MainScreen(Screen):
             "volume": "volume",
             "wordgap": "word_gap",
         }
-        attr = mapping.get(event.input.id)
-        if attr is not None:
-            setattr(self, attr, event.value)
+        if event.input.id  is not None:
+            attr = mapping.get(event.input.id)
+            if attr is not None:
+                setattr(self, attr, event.value)
 
 
 class EspeakNgTuiApp(App):
