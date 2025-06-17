@@ -6,6 +6,7 @@ from textual.reactive import reactive
 from textual import on
 from rich.text import Text
 import re
+import asyncio
 
 from espeak_checker import EspeakNgChecker
 from command_builder import EspeakParameters, compose_command
@@ -112,7 +113,11 @@ class MainScreen(Screen):
             if attr is not None:
                 setattr(self, attr, event.value)
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
+    async def execute_espeak(self, command: str) -> None:
+        process = await asyncio.create_subprocess_shell(command)
+        await process.wait()
+
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "play":
             clean_text = self.sanitize_text(self.text)
             params = EspeakParameters(
@@ -126,6 +131,7 @@ class MainScreen(Screen):
             command = compose_command(params)
             self.log(command)
             self.preview_widget.update(Text(command))
+            await self.execute_espeak(command)
 
 
 class EspeakNgTuiApp(App):
