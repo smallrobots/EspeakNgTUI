@@ -35,11 +35,16 @@
 }
 
 #messages ListItem {
-    layout: vertical;
+    layout: horizontal;
     border: round green;
     padding: 0 1;
     margin: 0 0 1 0;
+    height: auto;
+    content-align: left middle;
+    min-height: 1;
+    max-height: 3;
 }
+
 
 #messages ListItem .params {
     color: gray;
@@ -49,6 +54,9 @@
 
 #messages Button#delete {
     width: 3;
+    dock: right;
+    margin-left: 1;
+    content-align: center middle;
 }
 
 .label {
