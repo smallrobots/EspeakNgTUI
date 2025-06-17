@@ -3,6 +3,8 @@ from textual.containers import Horizontal, Container
 from textual.screen import Screen
 from textual.widgets import Static
 
+from espeak_checker import EspeakNgChecker
+
 class MainScreen(Screen):
     """Screen principale dell'applicazione."""
 
@@ -23,4 +25,5 @@ class EspeakNgTuiApp(App):
 
 
 if __name__ == "__main__":
+    EspeakNgChecker().validate_or_raise()
     EspeakNgTuiApp().run()
