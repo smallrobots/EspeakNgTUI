@@ -1,10 +1,11 @@
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, Container
 from textual.screen import Screen
-from textual.widgets import Static, Input
+from textual.widgets import Static, Input, Button
 from textual.reactive import reactive
 
 from espeak_checker import EspeakNgChecker
+from command_builder import EspeakParameters, compose_command
 
 class MainScreen(Screen):
     """Screen principale dell'applicazione."""
@@ -16,14 +17,47 @@ class MainScreen(Screen):
     volume: reactive[str] = reactive("100")
     word_gap: reactive[str] = reactive("0")
 
+    def watch_text(self, old: str, new: str) -> None:  # noqa: D401
+        """Update preview when text changes."""
+        self.update_preview()
+
+    def watch_voice(self, old: str, new: str) -> None:  # noqa: D401
+        self.update_preview()
+
+    def watch_speed(self, old: str, new: str) -> None:  # noqa: D401
+        self.update_preview()
+
+    def watch_pitch(self, old: str, new: str) -> None:  # noqa: D401
+        self.update_preview()
+
+    def watch_volume(self, old: str, new: str) -> None:  # noqa: D401
+        self.update_preview()
+
+    def watch_word_gap(self, old: str, new: str) -> None:  # noqa: D401
+        self.update_preview()
+
+    def update_preview(self) -> None:
+        """Compose command and display it in the preview widget."""
+        params = EspeakParameters(
+            text=self.text,
+            voice=self.voice,
+            speed=self.speed,
+            pitch=self.pitch,
+            volume=self.volume,
+            word_gap=self.word_gap,
+        )
+        command = compose_command(params)
+        self.query_one("#preview", Static).update(command)
+
+    def on_mount(self) -> None:
+        self.update_preview()
+
     def compose(self) -> ComposeResult:
         """Crea il layout di base con due colonne e un'area inferiore."""
         with Vertical(id="root"):
             with Horizontal(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
-                        yield Static("Testo da sintetizzare", classes="label")
-                        yield Input(id="text")
                         yield Static("Voce (es. it+f1)", classes="label")
                         yield Input(id="voice", placeholder="it")
                         yield Static("Velocità (80-500)", classes="label")
@@ -34,6 +68,9 @@ class MainScreen(Screen):
                         yield Input(id="volume", placeholder="100")
                         yield Static("Pausa tra parole (x10ms)", classes="label")
                         yield Input(id="wordgap", placeholder="0")
+                        yield Static("Testo da sintetizzare", classes="label")
+                        yield Input(id="text")
+                        yield Button(label="Riproduci", id="play")
                 yield Container(Static("Messaggi"), id="right")
             yield Static("Anteprima comando", id="preview")
 
@@ -51,6 +88,20 @@ class MainScreen(Screen):
             attr = mapping.get(event.input.id)
             if attr is not None:
                 setattr(self, attr, event.value)
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "play":
+            params = EspeakParameters(
+                text=self.text,
+                voice=self.voice,
+                speed=self.speed,
+                pitch=self.pitch,
+                volume=self.volume,
+                word_gap=self.word_gap,
+            )
+            command = compose_command(params)
+            self.log(command)
+            self.query_one("#preview", Static).update(command)
 
 
 class EspeakNgTuiApp(App):

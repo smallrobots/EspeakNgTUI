@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+#left Button {
+    width: 100%;
+}
+
 .label {
     text-style: bold;
 }
