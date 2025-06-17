@@ -1,0 +1,107 @@
+#root {
+    height: 100%;
+}
+
+#main {
+    height: 1fr;
+}
+
+#left, #right {
+    width: 1fr;
+    border: round green;
+    padding: 1;
+}
+
+#left {
+    layout: vertical;
+    padding: 1;
+}
+
+#left Input {
+    width: 100%;
+}
+
+#left Button {
+    width: 100%;
+    margin-top: 1;
+}
+
+#right {
+    layout: vertical;
+}
+
+#messages {
+    height: 1fr;
+}
+
+#messages ListItem {
+    layout: vertical;
+    border: round green;
+    padding: 0 1;
+    margin: 0 0 1 0;
+    height: auto;
+    content-align: left top;
+}
+
+#messages ListItem .msg-text {
+    width: 100%;
+    content-align: left middle;
+    text-wrap: wrap;
+    height: auto;
+}
+
+#messages ListItem .params {
+    color: gray;
+    text-style: italic;
+    padding-left: 1;
+    height: auto;
+    content-align: left top;
+    height: auto;
+}
+
+.message-grid {
+    layout: grid;
+    grid-size: 2 1;           /* 2 colonne, 1 riga */
+    grid-columns: 1fr auto;   /* prima colonna flessibile, seconda stretta */
+    height: auto;
+    width: 100%;
+    content-align: left middle;
+    height: auto;
+}
+
+.message-col1 {
+    width: 100%;
+    height: auto;
+}
+
+#messages Button#delete {
+    width: 3;
+    height: auto;
+    border: round red;
+    background: black;
+    color: red;
+    text-style: bold;
+    content-align: center middle;
+    margin-left: 1;
+}
+
+
+.label {
+    text-style: bold;
+}
+
+#preview {
+    height: auto;
+    min-height: 1;
+    border: round yellow;
+    padding: 1;
+    content-align: left middle;
+}
+
+#empty-label {
+    height: 100%;
+    content-align: center middle;
+    padding: 2;
+    color: gray;
+    text-style: italic;
+}
