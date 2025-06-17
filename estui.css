@@ -12,6 +12,19 @@
     padding: 1;
 }
 
+#left {
+    layout: vertical;
+    gap: 1;
+}
+
+#left Input {
+    width: 100%;
+}
+
+.label {
+    text-style: bold;
+}
+
 #preview {
     height: 3;
     dock: bottom;
