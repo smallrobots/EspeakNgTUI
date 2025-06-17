@@ -56,13 +56,33 @@
     padding-left: 1;
     height: auto;
     content-align: left top;
+    height: auto;
+}
+
+.message-grid {
+    layout: grid;
+    grid-size: 2 1;           /* 2 colonne, 1 riga */
+    grid-columns: 1fr auto;   /* prima colonna flessibile, seconda stretta */
+    height: auto;
+    width: 100%;
+    content-align: left middle;
+    height: auto;
+}
+
+.message-col1 {
+    width: 100%;
+    height: auto;
 }
 
 #messages Button#delete {
     width: 3;
-    dock: right;
-    margin-left: 1;
+    height: auto;
+    border: round red;
+    background: black;
+    color: red;
+    text-style: bold;
     content-align: center middle;
+    margin-left: 1;
 }
 
 

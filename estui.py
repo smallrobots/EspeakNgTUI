@@ -1,4 +1,5 @@
 from textual.app import App, ComposeResult
+from textual.containers import Grid
 from textual.containers import Horizontal, Vertical, Container
 from textual.screen import Screen
 from textual.widgets import Static, Input, Button, ListView, ListItem
@@ -22,50 +23,24 @@ class Defaults:
     WORD_GAP = "0"
     TEXT = ""
 
-# class MessageItem(ListItem):
-#     """List item representing a saved message."""
-
-#     def __init__(self, preset: MessagePreset) -> None:
-#         super().__init__()
-#         self.preset = preset
-
-#     def compose(self) -> ComposeResult:
-#         self.text_widget = Static(self.preset.text, expand=True, classes="msg-text")
-#         self.params_widget = Static(
-#             f"Voce: {self.preset.voice}  Velocità: {self.preset.speed}  Pitch: {self.preset.pitch}  Volume: {self.preset.volume}  Pausa: {self.preset.word_gap}",
-#             classes="params hidden"
-#         )
-#         with Vertical():
-#             with Horizontal():
-#                 yield self.text_widget
-#                 yield Button("x", id="delete")
-#             yield self.params_widget
-
-#     def on_mount(self) -> None:
-#         self.set_class(True, "compact")
-
-#     def watch_selected(self, selected: bool) -> None:
-#         self.params_widget.set_class(not selected, "hidden")
-
-
-
-#     @on(Button.Pressed, "#delete")
-#     def delete_pressed(self, event: Button.Pressed) -> None:
-#         self.remove()
-#         event.stop()
-
 class MessageItem(ListItem):
-    """List item representing a saved message, compatto e multi-riga."""
+    """Messaggio in stile tabellare: 2 colonne, 1 riga."""
 
     def __init__(self, preset: MessagePreset) -> None:
         self.preset = preset
         super().__init__(
-            Static(preset.text, classes="msg-text"),
-            Static(
-                f"Voce: {preset.voice}  Velocità: {preset.speed}  Pitch: {preset.pitch}  Volume: {preset.volume}  Pausa: {preset.word_gap}",
-                classes="params"
-            ),
-            Button("x", id="delete")
+            Grid(
+                Vertical(
+                    Static(preset.text, classes="msg-text"),
+                    Static(
+                        f"Voce: {preset.voice}  Velocità: {preset.speed}  Pitch: {preset.pitch}  Volume: {preset.volume}  Pausa: {preset.word_gap}",
+                        classes="params"
+                    ),
+                    classes="message-col1"
+                ),
+                Button("x", id="delete"),
+                classes="message-grid"
+            )
         )
 
     @on(Button.Pressed, "#delete")
