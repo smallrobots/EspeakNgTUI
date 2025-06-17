@@ -54,3 +54,10 @@
     content-align: left middle;
 }
 
+#empty-label {
+    height: 100%;
+    content-align: center middle;
+    padding: 2;
+    color: gray;
+    text-style: italic;
+}

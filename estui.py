@@ -60,7 +60,6 @@ class MessageItem(ListItem):
         self.remove()
         event.stop()
 
-
 class MainScreen(Screen):
     """Screen principale dell'applicazione."""
 
@@ -73,24 +72,7 @@ class MainScreen(Screen):
 
     preview_widget: Static
     messages_view: ListView
-
-    def watch_text(self, old: str, new: str) -> None:
-        self.update_preview()
-
-    def watch_voice(self, old: str, new: str) -> None:
-        self.update_preview()
-
-    def watch_speed(self, old: str, new: str) -> None:
-        self.update_preview()
-
-    def watch_pitch(self, old: str, new: str) -> None:
-        self.update_preview()
-
-    def watch_volume(self, old: str, new: str) -> None:
-        self.update_preview()
-
-    def watch_word_gap(self, old: str, new: str) -> None:
-        self.update_preview()
+    empty_label: Static
 
     def sanitize_text(self, text: str) -> str:
         """Rimuove caratteri di controllo e invisibili dal testo."""
@@ -117,15 +99,15 @@ class MainScreen(Screen):
                 with Container(id="left"):
                     with Vertical(id="controls"):
                         yield Static("Voce (es. it+f1)", classes="label")
-                        yield Input(id="voice", value=Defaults.VOICE, placeholder="es. it+f1")
+                        yield Input(id="voice", value=Defaults.VOICE)
                         yield Static("Velocità (80-500)", classes="label")
-                        yield Input(id="speed", value=Defaults.SPEED, placeholder=Defaults.SPEED)
+                        yield Input(id="speed", value=Defaults.SPEED)
                         yield Static("Pitch (0-99)", classes="label")
-                        yield Input(id="pitch", value=Defaults.PITCH, placeholder=Defaults.PITCH)
+                        yield Input(id="pitch", value=Defaults.PITCH)
                         yield Static("Volume (0-200)", classes="label")
-                        yield Input(id="volume", value=Defaults.VOLUME, placeholder=Defaults.VOLUME)
+                        yield Input(id="volume", value=Defaults.VOLUME)
                         yield Static("Pausa tra parole (x10ms)", classes="label")
-                        yield Input(id="word_gap", value=Defaults.WORD_GAP, placeholder=Defaults.WORD_GAP)
+                        yield Input(id="word_gap", value=Defaults.WORD_GAP)
                         yield Static("Testo da sintetizzare", classes="label")
                         yield Input(id="text", value=Defaults.TEXT, placeholder="Scrivi qualcosa qui...")
                         yield Button(label="Riproduci", id="play")
@@ -133,19 +115,26 @@ class MainScreen(Screen):
                 with Container(id="right"):
                     yield Static("Messaggi", classes="label")
                     yield ListView(id="messages")
+                    yield Static(
+                        "Nessun messaggio presente. Per aggiungere un nuovo messaggio utilizzare il pulsante \"Aggiungi\".",
+                        id="empty-label",
+                        classes="label"
+                    )
             yield Static("Anteprima comando", classes="label")
             yield Static("", id="preview")
 
     def on_mount(self) -> None:
         self.preview_widget = self.query_one("#preview", Static)
         self.messages_view = self.query_one("#messages", ListView)
-        for preset in PRESET_MESSAGES:
-            self.messages_view.append(MessageItem(preset))
+        self.empty_label = self.query_one("#empty-label", Static)
+        self.update_empty_label_visibility()
         self.update_preview()
+
+    def update_empty_label_visibility(self) -> None:
+        self.empty_label.display = len(self.messages_view.children) == 0
 
     @on(Input.Changed)
     def on_input_changed(self, event: Input.Changed) -> None:
-        """Aggiorna le variabili reactive quando un input cambia."""
         mapping = {
             "text": "text",
             "voice": "voice",
@@ -206,6 +195,15 @@ class MainScreen(Screen):
                 word_gap=self.word_gap,
             )
             self.messages_view.append(MessageItem(preset))
+            self.update_empty_label_visibility()
+
+    @on(Button.Pressed, "#delete")
+    def handle_delete(self, event: Button.Pressed) -> None:
+        item = event.button.ancestor(MessageItem)
+        if item:
+            self.messages_view.remove(item)
+            self.update_empty_label_visibility()
+        event.stop()
 
 
 class EspeakNgTuiApp(App):
