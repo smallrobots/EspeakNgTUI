@@ -30,9 +30,18 @@ class MessageItem(ListItem):
         self.preset = preset
 
     def compose(self) -> ComposeResult:
-        with Horizontal():
-            yield Static(self.preset.text, expand=True)
-            yield Button("x", id="delete")
+        params_line = (
+            f"Voce: {self.preset.voice} "
+            f"Velocità: {self.preset.speed} "
+            f"Pitch: {self.preset.pitch} "
+            f"Volume: {self.preset.volume} "
+            f"Pausa: {self.preset.word_gap}"
+        )
+        with Vertical():
+            with Horizontal():
+                yield Static(self.preset.text, expand=True, classes="msg-text")
+                yield Button("x", id="delete")
+            yield Static(params_line, classes="params")
 
     @on(Button.Pressed, "#delete")
     def delete_pressed(self, event: Button.Pressed) -> None:

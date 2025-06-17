@@ -35,7 +35,16 @@
 }
 
 #messages ListItem {
-    layout: horizontal;
+    layout: vertical;
+    border: round green;
+    padding: 0 1;
+    margin: 0 0 1 0;
+}
+
+#messages ListItem .params {
+    color: gray;
+    text-style: italic;
+    height: auto;
 }
 
 #messages Button#delete {
