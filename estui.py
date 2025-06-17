@@ -1,7 +1,7 @@
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, Container
 from textual.screen import Screen
-from textual.widgets import Static, Input, Button
+from textual.widgets import Static, Input, Button, ListView, ListItem
 from textual.reactive import reactive
 from textual import on
 from rich.text import Text
@@ -10,6 +10,7 @@ import asyncio
 
 from espeak_checker import EspeakNgChecker
 from command_builder import EspeakParameters, compose_command
+from presets import MessagePreset
 
 
 class Defaults:
@@ -20,6 +21,44 @@ class Defaults:
     VOLUME = "100"
     WORD_GAP = "0"
     TEXT = ""
+
+
+PRESET_MESSAGES = [
+    MessagePreset(
+        text="Ciao a tutti!",
+        voice=Defaults.VOICE,
+        speed=Defaults.SPEED,
+        pitch=Defaults.PITCH,
+        volume=Defaults.VOLUME,
+        word_gap=Defaults.WORD_GAP,
+    ),
+    MessagePreset(
+        text="Benvenuti nella demo di eSpeak-NG.",
+        voice=Defaults.VOICE,
+        speed=Defaults.SPEED,
+        pitch=Defaults.PITCH,
+        volume=Defaults.VOLUME,
+        word_gap=Defaults.WORD_GAP,
+    ),
+]
+
+
+class MessageItem(ListItem):
+    """List item representing a saved message."""
+
+    def __init__(self, preset: MessagePreset) -> None:
+        super().__init__()
+        self.preset = preset
+
+    def compose(self) -> ComposeResult:
+        with Horizontal():
+            yield Static(self.preset.text, expand=True)
+            yield Button("x", id="delete")
+
+    @on(Button.Pressed, "#delete")
+    def delete_pressed(self, event: Button.Pressed) -> None:
+        self.remove()
+        event.stop()
 
 
 class MainScreen(Screen):
@@ -33,6 +72,7 @@ class MainScreen(Screen):
     word_gap: reactive[str] = reactive(Defaults.WORD_GAP)
 
     preview_widget: Static
+    messages_view: ListView
 
     def watch_text(self, old: str, new: str) -> None:
         self.update_preview()
@@ -89,12 +129,18 @@ class MainScreen(Screen):
                         yield Static("Testo da sintetizzare", classes="label")
                         yield Input(id="text", value=Defaults.TEXT, placeholder="Scrivi qualcosa qui...")
                         yield Button(label="Riproduci", id="play")
-                yield Container(Static("Messaggi"), id="right")
+                        yield Button(label="Aggiungi", id="add")
+                with Container(id="right"):
+                    yield Static("Messaggi", classes="label")
+                    yield ListView(id="messages")
             yield Static("Anteprima comando", classes="label")
             yield Static("", id="preview")
 
     def on_mount(self) -> None:
         self.preview_widget = self.query_one("#preview", Static)
+        self.messages_view = self.query_one("#messages", ListView)
+        for preset in PRESET_MESSAGES:
+            self.messages_view.append(MessageItem(preset))
         self.update_preview()
 
     @on(Input.Changed)
@@ -117,6 +163,24 @@ class MainScreen(Screen):
         process = await asyncio.create_subprocess_shell(command)
         await process.wait()
 
+    @on(ListView.Selected, "#messages")
+    def on_message_selected(self, event: ListView.Selected) -> None:
+        item = event.item
+        if isinstance(item, MessageItem):
+            preset = item.preset
+            self.query_one("#text", Input).value = preset.text
+            self.query_one("#voice", Input).value = preset.voice
+            self.query_one("#speed", Input).value = preset.speed
+            self.query_one("#pitch", Input).value = preset.pitch
+            self.query_one("#volume", Input).value = preset.volume
+            self.query_one("#word_gap", Input).value = preset.word_gap
+            self.text = preset.text
+            self.voice = preset.voice
+            self.speed = preset.speed
+            self.pitch = preset.pitch
+            self.volume = preset.volume
+            self.word_gap = preset.word_gap
+
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "play":
             clean_text = self.sanitize_text(self.text)
@@ -132,6 +196,16 @@ class MainScreen(Screen):
             self.log(command)
             self.preview_widget.update(Text(command))
             await self.execute_espeak(command)
+        elif event.button.id == "add":
+            preset = MessagePreset(
+                text=self.text,
+                voice=self.voice,
+                speed=self.speed,
+                pitch=self.pitch,
+                volume=self.volume,
+                word_gap=self.word_gap,
+            )
+            self.messages_view.append(MessageItem(preset))
 
 
 class EspeakNgTuiApp(App):

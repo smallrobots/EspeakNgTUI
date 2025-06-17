@@ -26,6 +26,22 @@
     margin-top: 1;
 }
 
+#right {
+    layout: vertical;
+}
+
+#messages {
+    height: 1fr;
+}
+
+#messages ListItem {
+    layout: horizontal;
+}
+
+#messages Button#delete {
+    width: 3;
+}
+
 .label {
     text-style: bold;
 }
