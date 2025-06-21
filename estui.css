@@ -2,6 +2,14 @@
     height: 100%;
 }
 
+#title {
+    width: 100%;
+    border: round blue;
+    padding: 1;
+    content-align: center middle;
+    text-style: bold;
+}
+
 #main {
     height: 1fr;
 }

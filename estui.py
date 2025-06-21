@@ -93,6 +93,7 @@ class MainScreen(Screen):
 
     def compose(self) -> ComposeResult:
         with Vertical(id="root"):
+            yield Static("Textual User Interface for ESpeak-NG", id="title")
             with Horizontal(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
