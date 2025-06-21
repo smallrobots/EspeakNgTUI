@@ -61,8 +61,8 @@
 
 .message-grid {
     layout: grid;
-    grid-size: 2 1;           /* 2 colonne, 1 riga */
-    grid-columns: 1fr auto;   /* prima colonna flessibile, seconda stretta */
+    grid-size: 2 1;           /* 2 columns, 1 row */
+    grid-columns: 1fr auto;   /* first column flexible, second narrow */
     height: auto;
     width: 100%;
     content-align: left middle;

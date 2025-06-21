@@ -6,10 +6,10 @@ from command_builder import EspeakParameters, compose_command
 
 
 def test_compose_basic():
-    params = EspeakParameters(text="ciao")
+    params = EspeakParameters(text="hello")
     cmd = compose_command(params)
     assert "espeak-ng" in cmd
-    assert cmd.endswith("ciao")
+    assert cmd.endswith("hello")
 
 
 def test_compose_all_params():
