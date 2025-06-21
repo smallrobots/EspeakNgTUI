@@ -1,3 +1,12 @@
+# ######################################### #
+# Textual User Interface for ESpeak-NG      #
+#                                           #
+# Copyright 2025 - Oreste Riccardo Natale   #
+# Released under MIT License                #
+#                                           #
+# estui.py                                  #
+# ######################################### #
+
 from textual.app import App, ComposeResult
 from textual.containers import Grid
 from textual.containers import Horizontal, Vertical, Container
@@ -185,15 +194,6 @@ class MainScreen(Screen):
             )
             self.messages_view.append(MessageItem(preset))
             self.update_empty_label_visibility()
-
-    # @on(Button.Pressed, "#delete")
-    # def handle_delete(self, event: Button.Pressed) -> None:
-    #     item = event.button.ancestor(MessageItem)
-    #     if item:
-    #         self.messages_view.remove(item)
-    #         self.update_empty_label_visibility()
-    #     event.stop()
-
 
 class EspeakNgTuiApp(App):
     """Main TUI application."""

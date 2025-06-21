@@ -1,3 +1,12 @@
+# ######################################### #
+# Textual User Interface for ESpeak-NG      #
+#                                           #
+# Copyright 2025 - Oreste Riccardo Natale   #
+# Released under MIT License                #
+#                                           #
+# test_command_builder.py                   #
+# ######################################### #
+
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))

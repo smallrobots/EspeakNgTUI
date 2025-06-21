@@ -1,3 +1,12 @@
+# ######################################### #
+# Textual User Interface for ESpeak-NG      #
+#                                           #
+# Copyright 2025 - Oreste Riccardo Natale   #
+# Released under MIT License                #
+#                                           #
+# command_builder.py                        #
+# ######################################### #
+
 from dataclasses import dataclass
 import shlex
 
