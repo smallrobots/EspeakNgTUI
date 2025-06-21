@@ -9,7 +9,8 @@
 
 from textual.app import App, ComposeResult
 from textual.containers import Grid
-from textual.containers import Horizontal, Vertical, Container
+from textual.containers import Vertical, Container
+from horizontal_splitter import HorizontalSplitter
 from textual.screen import Screen
 from textual.widgets import Static, Input, Button, ListView, ListItem
 from textual.reactive import reactive
@@ -94,7 +95,7 @@ class MainScreen(Screen):
     def compose(self) -> ComposeResult:
         with Vertical(id="root"):
             yield Static("Textual User Interface for ESpeak-NG", id="title")
-            with Horizontal(id="main"):
+            with HorizontalSplitter(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
                         yield Static("Voice (e.g. it+f1)", classes="label")

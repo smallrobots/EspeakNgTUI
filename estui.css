@@ -20,6 +20,12 @@
     padding: 1;
 }
 
+HorizontalSplitter > .split-handle {
+    background: blue;
+    color: white;
+    width: 1;
+}
+
 #left {
     layout: vertical;
     padding: 1;
