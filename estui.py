@@ -15,7 +15,7 @@ from presets import MessagePreset
 
 
 class Defaults:
-    """Costanti di default per i parametri di espeak-ng."""
+    """Default values for espeak-ng parameters."""
     VOICE = "it"
     SPEED = "175"
     PITCH = "50"
@@ -24,7 +24,7 @@ class Defaults:
     TEXT = ""
 
 class MessageItem(ListItem):
-    """Messaggio in stile tabellare: 2 colonne, 1 riga."""
+    """Message displayed in two-column table style."""
 
     def __init__(self, preset: MessagePreset) -> None:
         self.preset = preset
@@ -33,7 +33,7 @@ class MessageItem(ListItem):
                 Vertical(
                     Static(preset.text, classes="msg-text"),
                     Static(
-                        f"Voce: {preset.voice}  Velocità: {preset.speed}  Pitch: {preset.pitch}  Volume: {preset.volume}  Pausa: {preset.word_gap}",
+                        f"Voice: {preset.voice}  Speed: {preset.speed}  Pitch: {preset.pitch}  Volume: {preset.volume}  Gap: {preset.word_gap}",
                         classes="params"
                     ),
                     classes="message-col1"
@@ -50,7 +50,7 @@ class MessageItem(ListItem):
 
 
 class MainScreen(Screen):
-    """Screen principale dell'applicazione."""
+    """Main application screen."""
 
     text: reactive[str] = reactive(Defaults.TEXT)
     voice: reactive[str] = reactive(Defaults.VOICE)
@@ -64,7 +64,7 @@ class MainScreen(Screen):
     empty_label: Static
 
     def sanitize_text(self, text: str) -> str:
-        """Rimuove caratteri di controllo e invisibili dal testo."""
+        """Remove control and invisible characters from text."""
         return re.sub(r'[\x00-\x1F\x7F\x9B\x80-\x9F\u2028\u2029]', '', text)
 
     def update_preview(self) -> None:
@@ -87,29 +87,29 @@ class MainScreen(Screen):
             with Horizontal(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
-                        yield Static("Voce (es. it+f1)", classes="label")
+                        yield Static("Voice (e.g. it+f1)", classes="label")
                         yield Input(id="voice", value=Defaults.VOICE)
-                        yield Static("Velocità (80-500)", classes="label")
+                        yield Static("Speed (80-500)", classes="label")
                         yield Input(id="speed", value=Defaults.SPEED)
                         yield Static("Pitch (0-99)", classes="label")
                         yield Input(id="pitch", value=Defaults.PITCH)
                         yield Static("Volume (0-200)", classes="label")
                         yield Input(id="volume", value=Defaults.VOLUME)
-                        yield Static("Pausa tra parole (x10ms)", classes="label")
+                        yield Static("Word gap (x10ms)", classes="label")
                         yield Input(id="word_gap", value=Defaults.WORD_GAP)
-                        yield Static("Testo da sintetizzare", classes="label")
-                        yield Input(id="text", value=Defaults.TEXT, placeholder="Scrivi qualcosa qui...")
-                        yield Button(label="Riproduci", id="play")
-                        yield Button(label="Aggiungi", id="add")
+                        yield Static("Text to synthesize", classes="label")
+                        yield Input(id="text", value=Defaults.TEXT, placeholder="Type something here...")
+                        yield Button(label="Play", id="play")
+                        yield Button(label="Add", id="add")
                 with Container(id="right"):
-                    yield Static("Messaggi", classes="label")
+                    yield Static("Messages", classes="label")
                     yield ListView(id="messages")
                     yield Static(
-                        "Nessun messaggio presente. Per aggiungere un nuovo messaggio utilizzare il pulsante \"Aggiungi\".",
+                        "No messages yet. Use the 'Add' button to create one.",
                         id="empty-label",
                         classes="label"
                     )
-            yield Static("Anteprima comando", classes="label")
+            yield Static("Command preview", classes="label")
             yield Static("", id="preview")
 
     def on_mount(self) -> None:
@@ -196,7 +196,7 @@ class MainScreen(Screen):
 
 
 class EspeakNgTuiApp(App):
-    """Applicazione TUI principale."""
+    """Main TUI application."""
 
     CSS_PATH = "estui.css"
 
