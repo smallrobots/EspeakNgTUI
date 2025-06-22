@@ -18,6 +18,8 @@ from rich.text import Text
 import re
 import asyncio
 
+from clipboard_util import copy_to_clipboard
+
 from espeak_checker import EspeakNgChecker
 from command_builder import EspeakParameters, compose_command
 from presets import MessagePreset
@@ -71,6 +73,7 @@ class MainScreen(Screen):
     preview_widget: Static
     messages_view: ListView
     empty_label: Static
+    current_command: str = ""
 
     def sanitize_text(self, text: str) -> str:
         """Remove control and invisible characters from text."""
@@ -88,6 +91,7 @@ class MainScreen(Screen):
             word_gap=self.word_gap,
         )
         command = compose_command(params)
+        self.current_command = command
         self.preview_widget.update(Text(command))
         self.preview_widget.refresh(layout=True)
 
@@ -120,7 +124,9 @@ class MainScreen(Screen):
                         classes="label"
                     )
             yield Static("Command preview", classes="label")
-            yield Static("", id="preview")
+            with Horizontal(id="preview-row"):
+                yield Static("", id="preview")
+                yield Button(label="Copy", id="copy")
 
     def on_mount(self) -> None:
         self.preview_widget = self.query_one("#preview", Static)
@@ -182,6 +188,7 @@ class MainScreen(Screen):
             )
             command = compose_command(params)
             self.log(command)
+            self.current_command = command
             self.preview_widget.update(Text(command))
             await self.execute_espeak(command)
         elif event.button.id == "add":
@@ -195,6 +202,8 @@ class MainScreen(Screen):
             )
             self.messages_view.append(MessageItem(preset))
             self.update_empty_label_visibility()
+        elif event.button.id == "copy":
+            copy_to_clipboard(self.current_command)
 
 class EspeakNgTuiApp(App):
     """Main TUI application."""

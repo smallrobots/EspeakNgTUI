@@ -28,3 +28,4 @@ textual-serve==1.1.2
 typing_extensions==4.14.0
 uc-micro-py==1.0.3
 yarl==1.20.1
+pyperclip==1.9.0

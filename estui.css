@@ -106,6 +106,20 @@
     content-align: left middle;
 }
 
+#preview-row {
+    layout: horizontal;
+    width: 100%;
+}
+
+#preview-row #preview {
+    width: 1fr;
+}
+
+#preview-row Button#copy {
+    width: auto;
+    margin-left: 1;
+}
+
 #empty-label {
     height: 100%;
     content-align: center middle;
