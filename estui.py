@@ -72,13 +72,16 @@ class MainScreen(Screen):
     messages_view: ListView
     empty_label: Static
 
-    def sanitize_text(self, text: str) -> str:
-        """Remove control and invisible characters from text."""
-        return re.sub(r'[\x00-\x1F\x7F\x9B\x80-\x9F\u2028\u2029]', '', text)
+    @staticmethod
+    def sanitize_input_text(text: str) -> str:
+        """Remove ANSI sequences and non-printable characters from text."""
+        text = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', text)  # ANSI
+        text = ''.join(c for c in text if c.isprintable())  # Non-printables
+        return text
 
     def update_preview(self) -> None:
         """Compose command and display it in the preview widget."""
-        clean_text = self.sanitize_text(self.text)
+        clean_text = self.sanitize_input_text(self.text)
         params = EspeakParameters(
             text=clean_text,
             voice=self.voice,
@@ -134,6 +137,8 @@ class MainScreen(Screen):
 
     @on(Input.Changed)
     def on_input_changed(self, event: Input.Changed) -> None:
+        event.input.value = self.sanitize_input_text(event.value)
+
         mapping = {
             "text": "text",
             "voice": "voice",
@@ -145,7 +150,7 @@ class MainScreen(Screen):
         if event.input.id is not None:
             attr = mapping.get(event.input.id)
             if attr is not None:
-                setattr(self, attr, event.value)
+                setattr(self, attr, event.input.value)
 
     async def execute_espeak(self, command: str) -> None:
         process = await asyncio.create_subprocess_shell(command)
@@ -155,23 +160,22 @@ class MainScreen(Screen):
     def on_message_selected(self, event: ListView.Selected) -> None:
         item = event.item
         if isinstance(item, MessageItem):
-            preset = item.preset
-            self.query_one("#text", Input).value = preset.text
-            self.query_one("#voice", Input).value = preset.voice
-            self.query_one("#speed", Input).value = preset.speed
-            self.query_one("#pitch", Input).value = preset.pitch
-            self.query_one("#volume", Input).value = preset.volume
-            self.query_one("#word_gap", Input).value = preset.word_gap
-            self.text = preset.text
-            self.voice = preset.voice
-            self.speed = preset.speed
-            self.pitch = preset.pitch
-            self.volume = preset.volume
-            self.word_gap = preset.word_gap
+            self.query_one("#text", Input).value = item.preset.text
+            self.query_one("#voice", Input).value = item.preset.voice
+            self.query_one("#speed", Input).value = item.preset.speed
+            self.query_one("#pitch", Input).value = item.preset.pitch
+            self.query_one("#volume", Input).value = item.preset.volume
+            self.query_one("#word_gap", Input).value = item.preset.word_gap
+            self.text = item.preset.text
+            self.voice = item.preset.voice
+            self.speed = item.preset.speed
+            self.pitch = item.preset.pitch
+            self.volume = item.preset.volume
+            self.word_gap = item.preset.word_gap
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "play":
-            clean_text = self.sanitize_text(self.text)
+            clean_text = self.sanitize_input_text(self.text)
             params = EspeakParameters(
                 text=clean_text,
                 voice=self.voice,
