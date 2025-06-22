@@ -6,6 +6,7 @@ ESpeak-ng TUI is a small Textual application that lets you try the `espeak-ng` t
 - **Parameter Controls** – Change voice, speed, pitch, volume and word gap.
 - **Text Input and Playback** – Type the sentence to synthesize and press **Play** to hear the result.
 - **Command Preview** – The full `espeak-ng` command is displayed so it can be copied or executed manually.
+- **Copy Button** – Use **Copy** to send the previewed command to the clipboard.
 - **Message List** – Store multiple messages with their parameters and recall them quickly.
 
 ## Requirements
