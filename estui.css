@@ -39,6 +39,15 @@
     layout: vertical;
 }
 
+#text {
+    height: 7;
+    width: 100%;
+    border: round $secondary;
+    padding: 1 1;
+    content-align: left top;
+}
+
+
 #messages {
     height: 1fr;
 }

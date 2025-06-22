@@ -72,12 +72,21 @@ class MainScreen(Screen):
     messages_view: ListView
     empty_label: Static
 
-    @staticmethod
-    def sanitize_input_text(text: str) -> str:
-        """Remove ANSI sequences and non-printable characters from text."""
-        text = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', text)  # ANSI
-        text = ''.join(c for c in text if c.isprintable())  # Non-printables
+    # --- Sanitizer --------------------------------------------------------
+
+    ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;:<=>?]*[A-Za-z]")
+    NON_PRINTABLE_RE = re.compile(r"[\x00-\x1F\x7F\x9B\x80-\x9F\u2028\u2029]")
+
+    @classmethod
+    def sanitize_input_text(cls, text: str) -> str:
+        """Remove ANSI sequences and non‑printable characters from *any* text coming
+        from a Textual ``Input`` widget.
+        """
+        text = cls.ANSI_ESCAPE_RE.sub("", text)            # 1️⃣ Strip ANSI / xterm mouse sequences
+        text = cls.NON_PRINTABLE_RE.sub("", text)          # 2️⃣ Drop control chars & separators
         return text
+
+    # ---------------------------------------------------------------------
 
     def update_preview(self) -> None:
         """Compose command and display it in the preview widget."""
@@ -111,7 +120,7 @@ class MainScreen(Screen):
                         yield Static("Word gap (x10ms)", classes="label")
                         yield Input(id="word_gap", value=Defaults.WORD_GAP)
                         yield Static("Text to synthesize", classes="label")
-                        yield Input(id="text", value=Defaults.TEXT, placeholder="Type something here...")
+                        yield Input(id="text", value=Defaults.TEXT, placeholder="Type something here…")
                         yield Button(label="Play", id="play")
                         yield Button(label="Add", id="add")
                 with Container(id="right"):
@@ -137,8 +146,10 @@ class MainScreen(Screen):
 
     @on(Input.Changed)
     def on_input_changed(self, event: Input.Changed) -> None:
+        # Sanitize the raw input value first
         event.input.value = self.sanitize_input_text(event.value)
 
+        # Map the sanitized value to reactive attrs
         mapping = {
             "text": "text",
             "voice": "voice",
