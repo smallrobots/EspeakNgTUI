@@ -4,14 +4,19 @@
 # Copyright 2025 - Oreste Riccardo Natale   #
 # Released under MIT License                #
 #                                           #
-# estui.py                                  #
+# espeak_ng_tui_app.py                      #
 # ######################################### #
 
-from espeak_checker import EspeakNgChecker
-from espeak_ng_tui_app import EspeakNgTuiApp
+from textual.app import App
+
+from main_screen import MainScreen
 
 
-if __name__ == "__main__":
-    EspeakNgChecker().validate_or_raise()
-    EspeakNgTuiApp().run()
+class EspeakNgTuiApp(App):
+    """Main TUI application."""
+
+    CSS_PATH = "estui.css"
+
+    def on_mount(self) -> None:
+        self.push_screen(MainScreen())
 
