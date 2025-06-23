@@ -1,3 +1,12 @@
+# ######################################### #
+# Textual User Interface for ESpeak-NG      #
+#                                           #
+# Copyright 2025 - Oreste Riccardo Natale   #
+# Released under MIT License                #
+#                                           #
+# test_command_builder.py                   #
+# ######################################### #
+
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -6,10 +15,10 @@ from command_builder import EspeakParameters, compose_command
 
 
 def test_compose_basic():
-    params = EspeakParameters(text="ciao")
+    params = EspeakParameters(text="hello")
     cmd = compose_command(params)
     assert "espeak-ng" in cmd
-    assert cmd.endswith("ciao")
+    assert cmd.endswith("hello")
 
 
 def test_compose_all_params():

@@ -4,18 +4,19 @@
 # Copyright 2025 - Oreste Riccardo Natale   #
 # Released under MIT License                #
 #                                           #
-# presets.py                                #
+# espeak_ng_tui_app.py                      #
 # ######################################### #
 
-from dataclasses import dataclass
+from textual.app import App
 
-@dataclass
-class MessagePreset:
-    """Parameters for a stored TTS message."""
+from main_screen import MainScreen
 
-    text: str
-    voice: str
-    speed: str
-    pitch: str
-    volume: str
-    word_gap: str
+
+class EspeakNgTuiApp(App):
+    """Main TUI application."""
+
+    CSS_PATH = "estui.css"
+
+    def on_mount(self) -> None:
+        self.push_screen(MainScreen())
+

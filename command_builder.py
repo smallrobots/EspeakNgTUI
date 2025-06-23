@@ -1,3 +1,12 @@
+# ######################################### #
+# Textual User Interface for ESpeak-NG      #
+#                                           #
+# Copyright 2025 - Oreste Riccardo Natale   #
+# Released under MIT License                #
+#                                           #
+# command_builder.py                        #
+# ######################################### #
+
 from dataclasses import dataclass
 import shlex
 
@@ -24,6 +33,6 @@ def compose_command(params: EspeakParameters) -> str:
     if params.word_gap:
         args += ["-g", params.word_gap]
     if params.text:
-        args.append(shlex.quote(params.text))  # 👈 protezione da caratteri strani
+        args.append(shlex.quote(params.text))  # 👈 protection from unusual characters
     retValue = " ".join(args)
     return retValue

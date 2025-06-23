@@ -4,18 +4,14 @@
 # Copyright 2025 - Oreste Riccardo Natale   #
 # Released under MIT License                #
 #                                           #
-# presets.py                                #
+# defaults.py                               #
 # ######################################### #
 
-from dataclasses import dataclass
-
-@dataclass
-class MessagePreset:
-    """Parameters for a stored TTS message."""
-
-    text: str
-    voice: str
-    speed: str
-    pitch: str
-    volume: str
-    word_gap: str
+class Defaults:
+    """Default values for espeak-ng parameters."""
+    VOICE = "it"
+    SPEED = "175"
+    PITCH = "50"
+    VOLUME = "100"
+    WORD_GAP = "0"
+    TEXT = ""
