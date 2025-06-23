@@ -71,6 +71,8 @@ class MainScreen(Screen):
     preview_widget: Static
     messages_view: ListView
     empty_label: Static
+    copy_button: Button
+    current_command: str = ""
 
     # --- Sanitizer --------------------------------------------------------
 
@@ -100,6 +102,7 @@ class MainScreen(Screen):
             word_gap=self.word_gap,
         )
         command = compose_command(params)
+        self.current_command = command
         self.preview_widget.update(Text(command))
         self.preview_widget.refresh(layout=True)
 
@@ -132,11 +135,14 @@ class MainScreen(Screen):
                         classes="label"
                     )
             yield Static("Command preview", classes="label")
-            yield Static("", id="preview")
+            with Grid(id="preview-row"):
+                yield Static("", id="preview")
+                yield Button(label="Copy", id="copy")
 
     def on_mount(self) -> None:
         self.preview_widget = self.query_one("#preview", Static)
         self.messages_view = self.query_one("#messages", ListView)
+        self.copy_button = self.query_one("#copy", Button)
         self.empty_label = self.query_one("#empty-label", Static)
         self.update_empty_label_visibility()
         self.update_preview()
@@ -197,6 +203,7 @@ class MainScreen(Screen):
             )
             command = compose_command(params)
             self.log(command)
+            self.current_command = command
             self.preview_widget.update(Text(command))
             await self.execute_espeak(command)
         elif event.button.id == "add":
@@ -210,6 +217,9 @@ class MainScreen(Screen):
             )
             self.messages_view.append(MessageItem(preset))
             self.update_empty_label_visibility()
+        elif event.button.id == "copy":
+            if self.current_command:
+                self.app.copy_to_clipboard(self.current_command)
 
 class EspeakNgTuiApp(App):
     """Main TUI application."""
