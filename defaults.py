@@ -4,13 +4,14 @@
 # Copyright 2025 - Oreste Riccardo Natale   #
 # Released under MIT License                #
 #                                           #
-# estui.py                                  #
+# defaults.py                               #
 # ######################################### #
 
-from espeak_checker import EspeakNgChecker
-from espeak_ng_tui_app import EspeakNgTuiApp
-
-if __name__ == "__main__":
-    EspeakNgChecker().validate_or_raise()
-    EspeakNgTuiApp().run()
-
+class Defaults:
+    """Default values for espeak-ng parameters."""
+    VOICE = "it"
+    SPEED = "175"
+    PITCH = "50"
+    VOLUME = "100"
+    WORD_GAP = "0"
+    TEXT = ""
