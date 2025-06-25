@@ -11,6 +11,8 @@ from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal, Vertical, Container
 from textual.screen import Screen
 from textual.widgets import Static, Input, Button, ListView
+
+from app.info_modal import InfoModal
 from textual.reactive import reactive
 from textual import on
 from rich.text import Text
@@ -61,7 +63,12 @@ class MainScreen(Screen):
 
     def compose(self) -> ComposeResult:
         with Vertical(id="root"):
-            yield Static("Textual User Interface for ESpeak-NG", id="title")
+            with Grid(id="title-row"):
+                yield Static(
+                    "Textual User Interface for ESpeak-NG",
+                    id="title",
+                )
+                yield Button(label="Info", id="info")
             with Horizontal(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
@@ -97,6 +104,7 @@ class MainScreen(Screen):
         self.messages_view = self.query_one("#messages", ListView)
         self.copy_button = self.query_one("#copy", Button)
         self.empty_label = self.query_one("#empty-label", Static)
+        self.query_one("#info", Button)
         self.update_empty_label_visibility()
         self.update_preview()
 
@@ -170,4 +178,6 @@ class MainScreen(Screen):
         elif event.button.id == "copy":
             if self.current_command:
                 self.app.copy_to_clipboard(self.current_command)
+        elif event.button.id == "info":
+            self.app.push_screen(InfoModal())
 

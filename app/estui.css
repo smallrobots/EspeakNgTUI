@@ -124,6 +124,20 @@
     height: auto;
 }
 
+#title-row {
+    layout: grid;
+    grid-size: 2 1;
+    grid-columns: 90% 10%;
+    width: 100%;
+    height: auto;
+}
+
+#title-row Button#info {
+    width: 100%;
+    height: 100%;
+    content-align: center middle;
+}
+
 #preview-row Button#copy {
     width: 100%;
     height: 100%;
@@ -136,4 +150,16 @@
     padding: 2;
     color: gray;
     text-style: italic;
+}
+
+#info-modal {
+    width: 60%;
+    border: round blue;
+    padding: 2;
+    content-align: center middle;
+}
+
+#info-modal Button#info-close {
+    width: 100%;
+    margin-top: 1;
 }
