@@ -152,11 +152,17 @@
     text-style: italic;
 }
 
+InfoModal {
+    align: center middle;
+}
+
 #info-modal {
-    width: 60%;
+    width: auto;
+    height: auto;
     border: round blue;
     padding: 2;
     content-align: center middle;
+    align: center middle;
 }
 
 #info-modal Button#info-close {
