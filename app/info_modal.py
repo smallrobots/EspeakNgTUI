@@ -17,6 +17,8 @@ from textual import on
 class InfoModal(ModalScreen[None]):
     """Modal window displaying application information."""
 
+    AUTO_FOCUS = "#info-close"
+
     def compose(self) -> ComposeResult:
         with Vertical(id="info-modal"):
             yield Static("ESpeak-ng TUI", id="info-title")
