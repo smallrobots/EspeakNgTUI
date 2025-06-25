@@ -157,7 +157,7 @@ InfoModal {
 }
 
 #info-modal {
-    width: auto;
+    width: 48;
     height: auto;
     border: round blue;
     padding: 2;

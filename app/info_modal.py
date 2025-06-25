@@ -27,7 +27,7 @@ class InfoModal(ModalScreen[None]):
                 id="info-copy",
             )
             yield Static(
-                "ctrl+s save\nctrl+o open\nctrl+n new\nctrl+q quit",
+                "\nShortcuts:\nctrl+n new\nctrl+o open\nctrl+n save\nctrl+q quit",
                 id="info-help",
             )
             yield Button("Close", id="info-close")
