@@ -11,7 +11,7 @@ from textual.widgets import ListItem, Button, Static
 from textual.containers import Grid, Vertical
 from textual import on
 
-from presets import MessagePreset
+from app.presets import MessagePreset
 
 
 class MessageItem(ListItem):

@@ -11,7 +11,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from command_builder import EspeakParameters, compose_command
+from app.command_builder import EspeakParameters, compose_command
 
 
 def test_compose_basic():

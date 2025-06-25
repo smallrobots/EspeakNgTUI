@@ -17,10 +17,10 @@ from rich.text import Text
 import re
 import asyncio
 
-from command_builder import EspeakParameters, compose_command
-from presets import MessagePreset
-from defaults import Defaults
-from message_item import MessageItem
+from app.command_builder import EspeakParameters, compose_command
+from app.presets import MessagePreset
+from app.defaults import Defaults
+from app.message_item import MessageItem
 
 
 class MainScreen(Screen):

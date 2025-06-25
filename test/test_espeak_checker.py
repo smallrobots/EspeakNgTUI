@@ -14,7 +14,7 @@ import shutil
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from espeak_checker import EspeakNgChecker
+from app.espeak_checker import EspeakNgChecker
 
 
 def test_check_exists(monkeypatch):

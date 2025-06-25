@@ -9,7 +9,7 @@
 
 from textual.app import App
 
-from main_screen import MainScreen
+from app.main_screen import MainScreen
 
 
 class EspeakNgTuiApp(App):
