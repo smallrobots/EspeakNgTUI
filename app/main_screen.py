@@ -11,8 +11,10 @@ from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal, Vertical, Container
 from textual.screen import Screen
 from textual.widgets import Static, Input, Button, ListView
+
+from app.info_modal import InfoModal
 from textual.reactive import reactive
-from textual import on
+from textual import on, events
 from rich.text import Text
 import re
 import asyncio
@@ -41,7 +43,7 @@ class MainScreen(Screen):
 
     def sanitize_text(self, text: str) -> str:
         """Remove control and invisible characters from text."""
-        return re.sub(r'[\x00-\x1F\x7F\x9B\x80-\x9F\u2028\u2029]', '', text)
+        return re.sub(r"[\x00-\x1F\x7F\x9B\x80-\x9F\u2028\u2029]", "", text)
 
     def update_preview(self) -> None:
         """Compose command and display it in the preview widget."""
@@ -61,7 +63,12 @@ class MainScreen(Screen):
 
     def compose(self) -> ComposeResult:
         with Vertical(id="root"):
-            yield Static("Textual User Interface for ESpeak-NG", id="title")
+            with Grid(id="title-row"):
+                yield Static(
+                    "Textual User Interface for ESpeak-NG",
+                    id="title",
+                )
+                yield Button(label="Info", id="info")
             with Horizontal(id="main"):
                 with Container(id="left"):
                     with Vertical(id="controls"):
@@ -76,7 +83,11 @@ class MainScreen(Screen):
                         yield Static("Word gap (x10ms)", classes="label")
                         yield Input(id="word_gap", value=Defaults.WORD_GAP)
                         yield Static("Text to synthesize", classes="label")
-                        yield Input(id="text", value=Defaults.TEXT, placeholder="Type something here...")
+                        yield Input(
+                            id="text",
+                            value=Defaults.TEXT,
+                            placeholder="Type something here...",
+                        )
                         yield Button(label="Play", id="play")
                         yield Button(label="Add", id="add")
                 with Container(id="right"):
@@ -97,8 +108,15 @@ class MainScreen(Screen):
         self.messages_view = self.query_one("#messages", ListView)
         self.copy_button = self.query_one("#copy", Button)
         self.empty_label = self.query_one("#empty-label", Static)
+        self.info_button = self.query_one("#info", Button)
         self.update_empty_label_visibility()
         self.update_preview()
+        # Focus the text input when the screen is first shown
+        self.set_focus(self.query_one("#text", Input))
+
+    def on_screen_resume(self, event: events.ScreenResume) -> None:
+        """Return focus to the text input when coming back from a modal."""
+        self.set_focus(self.query_one("#text", Input))
 
     def update_empty_label_visibility(self) -> None:
         self.empty_label.display = len(self.messages_view.children) == 0
@@ -170,4 +188,5 @@ class MainScreen(Screen):
         elif event.button.id == "copy":
             if self.current_command:
                 self.app.copy_to_clipboard(self.current_command)
-
+        elif event.button.id == "info":
+            self.app.push_screen(InfoModal())
