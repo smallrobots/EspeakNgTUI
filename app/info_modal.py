@@ -23,7 +23,7 @@ class InfoModal(ModalScreen[None]):
         with Vertical(id="info-modal"):
             yield Static("ESpeak-ng TUI", id="info-title")
             yield Static(
-                "Copyright 2025 - Oreste Riccardo Natale",
+                "Copyright 2025 - Oreste Riccardo Natale\nReleased under the MIT License",
                 id="info-copy",
             )
             yield Static(

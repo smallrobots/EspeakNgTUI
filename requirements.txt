@@ -20,6 +20,7 @@ platformdirs==4.3.8
 pluggy==1.6.0
 propcache==0.3.2
 Pygments==2.19.1
+pyperclip==1.9.0
 pytest==8.4.0
 rich==14.0.0
 textual==3.4.0

@@ -2,6 +2,8 @@
 
 ESpeak-ng TUI is a small Textual application that lets you try the `espeak-ng` text-to-speech engine from a terminal interface. The user can adjust common speech parameters, enter text, preview the generated command and play it directly.
 
+![ESpeak-ng TUI Screenshot](resources/Screenshot-1.png)
+
 ## Features
 - **Parameter Controls** – Change voice, speed, pitch, volume and word gap.
 - **Text Input and Playback** – Type the sentence to synthesize and press **Play** to hear the result.
