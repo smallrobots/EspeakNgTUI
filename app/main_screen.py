@@ -21,8 +21,7 @@ import asyncio
 
 from app.command_builder import EspeakParameters, compose_command
 from app.presets import MessagePreset, MessageDocument
-
-PRESETS_PATH = "messages.json"
+from app.file_modal import FileModal
 from app.defaults import Defaults
 from app.message_item import MessageItem
 
@@ -153,18 +152,24 @@ class MainScreen(Screen):
         self.messages_view.clear()
         self.update_empty_label_visibility()
 
-    def action_save_document(self) -> None:
-        """Save presets to :data:`PRESETS_PATH`."""
-        presets = []
+    async def action_save_document(self) -> None:
+        """Prompt for a path and save presets."""
+        path = await self.app.push_screen(FileModal("Save document"), wait_for_dismiss=True)
+        if not path:
+            return
+        presets: list[MessagePreset] = []
         for item in self.messages_view.children:
             if isinstance(item, MessageItem):
                 presets.append(item.preset)
-        MessageDocument(presets).save(PRESETS_PATH)
+        MessageDocument(presets).save(path)
 
-    def action_open_document(self) -> None:
-        """Load presets from :data:`PRESETS_PATH`."""
+    async def action_open_document(self) -> None:
+        """Prompt for a path and load presets."""
+        path = await self.app.push_screen(FileModal("Open document"), wait_for_dismiss=True)
+        if not path:
+            return
         try:
-            doc = MessageDocument.load(PRESETS_PATH)
+            doc = MessageDocument.load(path)
         except FileNotFoundError:
             return
         self.messages_view.clear()
