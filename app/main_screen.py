@@ -13,6 +13,7 @@ from textual.screen import Screen
 from textual.widgets import Static, Input, Button, ListView
 
 from app.info_modal import InfoModal
+from app.file_modal import FileModal
 from textual.reactive import reactive
 from textual import on, events
 from rich.text import Text
@@ -28,6 +29,11 @@ from app.message_item import MessageItem
 class MainScreen(Screen):
     """Main application screen."""
 
+    BINDINGS = [
+        ("ctrl+s", "save_document", "Save document"),
+        ("ctrl+o", "open_document", "Open document"),
+    ]
+
     text: reactive[str] = reactive(Defaults.TEXT)
     voice: reactive[str] = reactive(Defaults.VOICE)
     speed: reactive[str] = reactive(Defaults.SPEED)
@@ -40,6 +46,12 @@ class MainScreen(Screen):
     empty_label: Static
     copy_button: Button
     current_command: str = ""
+
+    async def _prompt_file(self) -> str | None:
+        """Display a ``FileModal`` and return the selected path."""
+        screen = FileModal()
+        self.app.push_screen(screen)
+        return await screen.wait_for_dismiss()
 
     def sanitize_text(self, text: str) -> str:
         """Remove control and invisible characters from text."""
@@ -190,3 +202,19 @@ class MainScreen(Screen):
                 self.app.copy_to_clipboard(self.current_command)
         elif event.button.id == "info":
             self.app.push_screen(InfoModal())
+
+    async def action_save_document(self) -> None:
+        """Prompt for a file path and save the current text."""
+        path = await self._prompt_file()
+        if path:
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(self.text)
+
+    async def action_open_document(self) -> None:
+        """Prompt for a file path and load text from it."""
+        path = await self._prompt_file()
+        if path:
+            with open(path, "r", encoding="utf-8") as fh:
+                data = fh.read()
+            self.query_one("#text", Input).value = data
+            self.text = data
