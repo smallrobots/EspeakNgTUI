@@ -19,8 +19,10 @@ Install dependencies with `pip install -r requirements.txt`.
 Run the application with:
 
 ```bash
-python estui.py
+python estui.py [presets.json]
 ```
+
+If no file is provided, `messages_preset.json` is used.
 
 Use the controls on the left to set parameters and type text. The right side lists stored messages. Select a message to load its values or press **Add** to store the current one. Press **Play** to run `espeak-ng` with the selected options.
 

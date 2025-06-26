@@ -18,11 +18,10 @@ from textual import on, events
 from rich.text import Text
 import re
 import asyncio
+import os
 
 from app.command_builder import EspeakParameters, compose_command
 from app.presets import MessagePreset, MessageDocument
-
-PRESETS_PATH = "messages.json"
 from app.defaults import Defaults
 from app.message_item import MessageItem
 
@@ -31,10 +30,14 @@ class MainScreen(Screen):
     """Main application screen."""
 
     BINDINGS = [
-        ("ctrl+n", "new_document", "New"),
         ("ctrl+o", "open_document", "Open"),
         ("ctrl+s", "save_document", "Save"),
     ]
+
+    def __init__(self, presets_path: str) -> None:
+        super().__init__()
+        self.presets_path = presets_path
+        self.file_name = os.path.basename(presets_path)
 
     text: reactive[str] = reactive(Defaults.TEXT)
     voice: reactive[str] = reactive(Defaults.VOICE)
@@ -73,7 +76,7 @@ class MainScreen(Screen):
         with Vertical(id="root"):
             with Grid(id="title-row"):
                 yield Static(
-                    "Textual User Interface for ESpeak-NG",
+                    f"Textual User Interface for ESpeak-NG ({self.file_name})",
                     id="title",
                 )
                 yield Button(label="Info", id="info")
@@ -154,17 +157,17 @@ class MainScreen(Screen):
         self.update_empty_label_visibility()
 
     def action_save_document(self) -> None:
-        """Save presets to :data:`PRESETS_PATH`."""
+        """Save presets to :attr:`presets_path`."""
         presets = []
         for item in self.messages_view.children:
             if isinstance(item, MessageItem):
                 presets.append(item.preset)
-        MessageDocument(presets).save(PRESETS_PATH)
+        MessageDocument(presets).save(self.presets_path)
 
     def action_open_document(self) -> None:
-        """Load presets from :data:`PRESETS_PATH`."""
+        """Load presets from :attr:`presets_path`."""
         try:
-            doc = MessageDocument.load(PRESETS_PATH)
+            doc = MessageDocument.load(self.presets_path)
         except FileNotFoundError:
             return
         self.messages_view.clear()

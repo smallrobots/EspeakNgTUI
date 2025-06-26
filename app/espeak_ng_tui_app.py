@@ -17,6 +17,10 @@ class EspeakNgTuiApp(App):
 
     CSS_PATH = "estui.css"
 
+    def __init__(self, presets_path: str) -> None:
+        super().__init__()
+        self.presets_path = presets_path
+
     def on_mount(self) -> None:
-        self.push_screen(MainScreen())
+        self.push_screen(MainScreen(self.presets_path))
 
