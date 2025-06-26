@@ -20,13 +20,21 @@ import re
 import asyncio
 
 from app.command_builder import EspeakParameters, compose_command
-from app.presets import MessagePreset
+from app.presets import MessagePreset, MessageDocument
+
+PRESETS_PATH = "messages.json"
 from app.defaults import Defaults
 from app.message_item import MessageItem
 
 
 class MainScreen(Screen):
     """Main application screen."""
+
+    BINDINGS = [
+        ("ctrl+n", "new_document", "New"),
+        ("ctrl+o", "open_document", "Open"),
+        ("ctrl+s", "save_document", "Save"),
+    ]
 
     text: reactive[str] = reactive(Defaults.TEXT)
     voice: reactive[str] = reactive(Defaults.VOICE)
@@ -139,6 +147,30 @@ class MainScreen(Screen):
     async def execute_espeak(self, command: str) -> None:
         process = await asyncio.create_subprocess_shell(command)
         await process.wait()
+
+    def action_new_document(self) -> None:
+        """Clear all stored messages."""
+        self.messages_view.clear()
+        self.update_empty_label_visibility()
+
+    def action_save_document(self) -> None:
+        """Save presets to :data:`PRESETS_PATH`."""
+        presets = []
+        for item in self.messages_view.children:
+            if isinstance(item, MessageItem):
+                presets.append(item.preset)
+        MessageDocument(presets).save(PRESETS_PATH)
+
+    def action_open_document(self) -> None:
+        """Load presets from :data:`PRESETS_PATH`."""
+        try:
+            doc = MessageDocument.load(PRESETS_PATH)
+        except FileNotFoundError:
+            return
+        self.messages_view.clear()
+        for preset in doc.messages:
+            self.messages_view.append(MessageItem(preset))
+        self.update_empty_label_visibility()
 
     @on(ListView.Selected, "#messages")
     def on_message_selected(self, event: ListView.Selected) -> None:
